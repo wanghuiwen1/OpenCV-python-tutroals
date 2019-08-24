@@ -6,7 +6,7 @@ import numpy as np
 from imutils.video import VideoStream
 import face_recognition
 
-
+# 已知的人脸
 image = face_recognition.load_image_file("./resource/wanghuiwen.jpeg")
 wanghuiwen = face_recognition.face_encodings(image)[0]
 
@@ -24,17 +24,17 @@ while True:
     #从线程视频流中抓取帧并调整其大小
     #最大宽度为400像素
     frame = vs.read()
-    frame = imutils.resize(frame, width=400)
+    # frame = imutils.resize(frame, width=400)
 
     # 抓住框架尺寸并将其转换为blob
     (h, w) = frame.shape[:2]
-    blob = cv2.dnn.blobFromImage(cv2.resize(frame, (300, 300)), 1.0,
+    blob = cv2.dnn.blobFromImage(cv2.resize(frame, (300, 300), fx=0, fy=0, interpolation=cv2.INTER_CUBIC), 1.0,
                                  (300, 300), (104.0, 177.0, 123.0))
-    #
-    # # 通过网络传递blob并获取检测和预测
+
+    # 通过网络传递blob并获取检测和预测
     net.setInput(blob)
     detections = net.forward()
-    #
+
     # # 在detectionsq上循环
     for i in range(0, detections.shape[2]):
         # 提取与之相关的置信度（即概率）
